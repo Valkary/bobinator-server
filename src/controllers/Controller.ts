@@ -96,7 +96,7 @@ export const Controller = {
   login: async (req: Request, res: Response) => {
     const { username, password } = req.query;
 
-    if (typeof username === "string" && username.length > 0 && typeof password === "string" && password.length > 0) {
+    if (typeof username === "string" && username.length > 0 && typeof password === "string" && password.length > 0 && typeof username !== "undefined" && password !== "undefined") {
       const db_password = await getUserEncryptedPassword(username);
 
       if (typeof db_password === "undefined") return res.status(200).send({ success: false, message: "Nombre de usuario o contraseña no encontrados!" });
@@ -104,14 +104,15 @@ export const Controller = {
       const compare_hashes = await verifyHashedPasswords(password, db_password);
 
       if (compare_hashes) {
+        console.log("User found on database. Logging in...");
         return res.status(200).send({ success: true, message: "Loggeando usuario!" });
       } else {
+        console.log("User not found. Verify credentials");
         return res.status(200).send({ success: false, message: "Nombre de usuario o contraseña no encontrados!" });
       }
     } else {
+      console.log("Empty credentials.");
       res.status(200).send({ success: false, message: "Nombre de usuario o contraseña no encontrados!" });
     }
-
-    res.status(200).send("");    
   }
 };
