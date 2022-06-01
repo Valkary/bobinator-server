@@ -15,6 +15,7 @@ import { getUsers } from '../functions/users/getUsers';
 import { getUserEncryptedPassword, verifyHashedPasswords } from '../functions/users/loginUser';
 import { getOrderHistory } from '../functions/orders/getOrderHistory';
 import { calculatePercentages } from '../functions/orders/getOrderCount';
+import { createOrder, createProdOrder } from '../functions/prod/createOrder';
 
 export const Controller = {
   home: async (req: Request, res: Response) => {
@@ -113,6 +114,29 @@ export const Controller = {
     } else {
       console.log("Empty credentials.");
       res.status(200).send({ success: false, message: "Nombre de usuario o contraseña no encontrados!" });
+    }
+  },
+
+  create_order: async (req: Request, res: Response) => {
+    const { metros } = req.query;
+
+    if (metros) {
+      const parsed_metros = typeof metros === "string" ? parseInt(metros.toString(), 10) : 0;
+      const create_order = await createOrder(parsed_metros);
+
+      // @ts-ignore
+      if(create_order && !isNaN(create_order)) {
+        // @ts-ignore
+        const create_prod_order = await createProdOrder(create_order);
+        io.emit('order-update');
+        logIntoDB(`El pedido #${create_order} de ${metros} metros ha sido creado y esta en espera de aprobación para produccón!`);
+        console.log("Aqui!");
+        return res.status(200).send({ success: true, message: "Pedido creado exitosamente"});  
+      } else {
+        return res.status(200).send({ success: false, message: "Error en metros" });
+      }
+    } else {
+      return res.status(200).send({ success: false, message: "Error en metros" });
     }
   }
 };

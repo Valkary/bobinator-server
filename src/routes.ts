@@ -20,5 +20,6 @@ router.get('/orders/order_count', Controller.get_order_count);
 // POST requests
 router.post('/production/update_order', Controller.update_order);
 router.post('/users/login_user', Controller.login);
+router.post('/production/create_order', Controller.create_order);
 
 export default router;
