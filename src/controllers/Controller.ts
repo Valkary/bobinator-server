@@ -100,7 +100,7 @@ export const Controller = {
     if (typeof username === "string" && username.length > 0 && typeof password === "string" && password.length > 0 && typeof username !== "undefined" && password !== "undefined") {
       const db_password = await getUserEncryptedPassword(username);
 
-      if (typeof db_password === "undefined") return res.status(200).send({ success: false, message: "Nombre de usuario o contraseña no encontrados!" });
+      if (typeof db_password === "undefined" || db_password.length === 0) return res.status(200).send({ success: false, message: "Nombre de usuario o contraseña no encontrados!" });
       
       const compare_hashes = await verifyHashedPasswords(password, db_password);
 
@@ -128,9 +128,8 @@ export const Controller = {
       if(create_order && !isNaN(create_order)) {
         // @ts-ignore
         const create_prod_order = await createProdOrder(create_order);
-        const log = await logIntoDB(`El pedido #${create_order} de ${metros} metros ha sido creado y esta en espera de aprobación para produccón!`);
+        const log = await logIntoDB(`El pedido #${create_order} de ${metros} metros ha sido creado y esta en espera de aprobación para producción!`);
         if(log) {
-          console.log(`El pedido #${create_order} de ${metros} metros ha sido creado y esta en espera de aprobación para produccón!`);
           io.emit('order_update');
         }
         return res.status(200).send({ success: true, message: "Pedido creado exitosamente"});  

@@ -6,8 +6,12 @@ export function getUserEncryptedPassword(username: string) {
 
   return new Promise<string>((resolve, reject) => {
     pool_connection.query("SELECT password FROM users WHERE username = ?;", [username], (err, result: any) => {
-      if (err) reject(err);
-      resolve(result[0]?.password);
+      console.error(err);
+      if(typeof result === "undefined") {
+        resolve("");
+      } else {
+        resolve(result[0]?.password);
+      } 
     });
   })
 }

@@ -10,6 +10,7 @@ node_modules
 dist
 dist-ssr
 *.local
+constants.ts
 
 # Editor directories and files
 .vscode/*
