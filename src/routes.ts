@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { Controller } from "./controllers/Controller";
+import { ArduinoController } from "./controllers/ArduinoController";
 
 const router = Router();
 
@@ -16,6 +17,10 @@ router.get('/orders/finished', Controller.get_finished_orders);
 router.get('/orders/on-hold', Controller.get_on_hold_orders);
 router.get('/orders/order_history', Controller.get_order_history);
 router.get('/orders/order_count', Controller.get_order_count);
+
+// ARDUINO GET REQUESTS
+router.get('/arduino/in_prod', ArduinoController.order_in_prod);
+router.get('/arduino/prod_state', ArduinoController.global_prod_state);
 
 // POST requests
 router.post('/production/update_order', Controller.update_order);
