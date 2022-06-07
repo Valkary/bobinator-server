@@ -82,8 +82,10 @@ export const Controller = {
         console.log("Actualizacion realizada con exito!");
         io.emit("order_update")
         logIntoDB(`El pedido #${int_id} ha sido movido a etapa de produccón no. ${next_order_status} y fue insertado en el registro ${update_order.insertId}`);
-        if(next_order_status === 2) {
+        if (next_order_status === 2) {
           logIntoDB(`El pedido #${int_id} fue aprovado para producción`);
+        } else if (next_order_status === 6) {
+          // Actualizar la cola de produccion a que se ponga un nuevo pedido en produccion de los ya aprobados
         }
         res.status(200).send({ success: " true", message: update_order.message});
       } else {
