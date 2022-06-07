@@ -68,7 +68,7 @@ export const Controller = {
 
   update_order: async (req: Request, res: Response) => {
     const { id } = req.query;
-    console.log(`Actualizando la order #${id}`);
+    console.log(`Actualizando la orden #${id}`);
     const int_id = typeof id === "string" ? parseInt(id.toString(), 10) : 0
 
     // Verificamos que el id sea un numero valido
@@ -85,7 +85,7 @@ export const Controller = {
         if(next_order_status === 2) {
           logIntoDB(`El pedido #${int_id} fue aprovado para producción`);
         }
-        res.status(200).send(update_order.message);
+        res.status(200).send({ success: " true", message: update_order.message});
       } else {
         res.status(400).send({ error: true, message: "Ha ocurrido un error al actualizar la produccion" });
       }
