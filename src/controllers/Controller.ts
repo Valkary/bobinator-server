@@ -16,6 +16,7 @@ import { getUserEncryptedPassword, verifyHashedPasswords } from '../functions/us
 import { getOrderHistory } from '../functions/orders/getOrderHistory';
 import { calculatePercentages } from '../functions/orders/getOrderCount';
 import { createOrder, createProdOrder } from '../functions/prod/createOrder';
+import { productionLine } from '../functions/prod/prodLine';
 
 export const Controller = {
   home: async (req: Request, res: Response) => {
@@ -70,7 +71,7 @@ export const Controller = {
     const { id } = req.query;
     console.log(`Actualizando la orden #${id}`);
     const int_id = typeof id === "string" ? parseInt(id.toString(), 10) : 0
-
+    
     // Verificamos que el id sea un numero valido
     if(typeof int_id !== 'undefined' && int_id !== null && int_id > 0) {
       const current_order_status = await getCurrentOrderStatus(int_id);
@@ -86,6 +87,7 @@ export const Controller = {
           logIntoDB(`El pedido #${int_id} fue aprovado para producción`);
         } else if (next_order_status === 6) {
           // Actualizar la cola de produccion a que se ponga un nuevo pedido en produccion de los ya aprobados
+          const prod_line = productionLine();
         }
         res.status(200).send({ success: " true", message: update_order.message});
       } else {
