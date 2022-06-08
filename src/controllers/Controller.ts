@@ -18,6 +18,7 @@ import { calculatePercentages } from '../functions/orders/getOrderCount';
 import { createOrder, createProdOrder } from '../functions/prod/createOrder';
 import { productionLine } from '../functions/prod/prodLine';
 import { updateGlobalProdState } from '../functions/prod/updateGlobalProdState';
+import { globalProdState } from '../functions/prod/globalProdState';
 
 export const Controller = {
   home: async (req: Request, res: Response) => {
@@ -86,7 +87,11 @@ export const Controller = {
         logIntoDB(`El pedido #${int_id} ha sido movido a etapa de produccón no. ${next_order_status} y fue insertado en el registro ${update_order.insertId}`);
         if (next_order_status === 2) {
           logIntoDB(`El pedido #${int_id} fue aprovado para producción`);
-          updateGlobalProdState(1, int_id);
+          const prod_state = await globalProdState();
+
+          if (prod_state[0].curr_order === 0) {
+            updateGlobalProdState(1, int_id);
+          }
         } else if (next_order_status === 6) {
           // Actualizar la cola de produccion a que se ponga un nuevo pedido en produccion de los ya aprobados
           const prod_line = productionLine();
