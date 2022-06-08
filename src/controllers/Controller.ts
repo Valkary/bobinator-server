@@ -83,19 +83,18 @@ export const Controller = {
       
       if(update_order.success) {
         console.log("Actualizacion realizada con exito!");
-        io.emit("order_update")
         logIntoDB(`El pedido #${int_id} ha sido movido a etapa de produccón no. ${next_order_status} y fue insertado en el registro ${update_order.insertId}`);
         if (next_order_status === 2) {
           logIntoDB(`El pedido #${int_id} fue aprovado para producción`);
           const prod_state = await globalProdState();
-
+          
           if (prod_state[0].curr_order === 0) {
             updateGlobalProdState(1, int_id);
           }
         } else if (next_order_status === 6) {
-          // Actualizar la cola de produccion a que se ponga un nuevo pedido en produccion de los ya aprobados
-          const prod_line = productionLine();
+          productionLine();
         }
+        io.emit("order_update");
         res.status(200).send({ success: " true", message: update_order.message});
       } else {
         res.status(400).send({ error: true, message: "Ha ocurrido un error al actualizar la produccion" });
