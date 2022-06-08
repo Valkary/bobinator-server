@@ -11,11 +11,16 @@ export const ArduinoController = {
     if (order_in_prod) {
       const order = order_in_prod[0];
 
-      const { id, vueltas } = order;
+      if (order) {        
+              const { id, vueltas } = order;
+        
+              const return_object = { id, metros: vueltas };
+        
+              res.status(200).send(return_object);
 
-      const return_object = { id, metros: vueltas };
-
-      res.status(200).send(return_object);
+      } else {
+       res.status(200).send({ success: false }); 
+      }
     } else {
       res.status(200).send({ success: false })
     }
