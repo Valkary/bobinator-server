@@ -33,6 +33,7 @@ export const Controller = {
     res.status(200).send(todays_logs);
   },
   global_prod_state: async (req: Request, res: Response) => {
+    console.log("Getting prod state");
     const prod_state = await getGlobalProdState();
     res.status(200).send(prod_state);
   },
