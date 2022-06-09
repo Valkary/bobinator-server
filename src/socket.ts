@@ -3,7 +3,7 @@ import { SocketPort, ClientURL, TauriURL } from './constants';
 
 export const io = new Server(SocketPort, {
   cors: {
-    origin: '*',
+    origin: [ClientURL, TauriURL],
     methods: ["GET", "POST"]
   }
 });
