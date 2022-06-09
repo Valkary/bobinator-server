@@ -1,9 +1,9 @@
 import { Server } from 'socket.io';
-import { SocketPort, ClientURL } from './constants';
+import { SocketPort, ClientURL, TauriURL } from './constants';
 
 export const io = new Server(SocketPort, {
   cors: {
-    origin: ClientURL,
+    origin: '*',
     methods: ["GET", "POST"]
   }
 });
